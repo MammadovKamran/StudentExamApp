@@ -1,0 +1,125 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Şagird əlavə et</h2>
+  <form (ngSubmit)="handleAddStudent()">
+    <div class="flex flex-col space-y-2 mb-6">
+      <label>Şagirdin nömrəsi</label>
+      <input
+        type="number"
+        class="border p-2"
+        placeholder="Şagirdin nömrəsi"
+        name="studentNum"
+        [(ngModel)]="newStudent.studentNum"
+        required
+      />
+      <span
+        *ngIf="
+          newStudent.studentNum &&
+          (newStudent.studentNum < 10000 || newStudent.studentNum > 99999)
+        "
+        class="text-red-500 transition-all"
+        >Şagirdin nömrəsi 5 rəqəmdən ibarət olmalıdır.</span
+      >
+
+      <label>Şagirdin adı</label>
+      <input
+        type="text"
+        class="border p-2"
+        placeholder="Şagirdin adı"
+        name="name"
+        [(ngModel)]="newStudent.name"
+        required
+      />
+      <span
+        *ngIf="newStudent.name && newStudent.name.length > 30"
+        class="text-red-500 transition-all"
+        >Ad maksimum 30 simvol olmalıdır.</span
+      >
+
+      <label>Şagirdin soyadı</label>
+      <input
+        type="text"
+        class="border p-2"
+        placeholder="Şagirdin soyadı"
+        name="surname"
+        [(ngModel)]="newStudent.surname"
+        required
+      />
+      <span
+        *ngIf="newStudent.surname && newStudent.surname.length > 30"
+        class="text-red-500 transition-all"
+        >Soyad maksimum 30 simvol olmalıdır.</span
+      >
+
+      <label>Şagirdin sinifi</label>
+      <select
+        title="class"
+        class="border p-2"
+        name="studentClass"
+        [(ngModel)]="newStudent.studentClass"
+        required
+      >
+        <option value="0" disabled>Şagirdin sinifini seçin</option>
+        <option *ngFor="let lesson of lessons" [value]="lesson.lessonClass">
+          Class {{ lesson.lessonClass }} - {{ lesson.name }}
+        </option>
+      </select>
+      <span
+        *ngIf="newStudent.studentClass === 0"
+        class="text-red-500 transition-all"
+        >Şagirdin sinifi seçilməlidir.</span
+      >
+
+      <button
+        class="py-2 mt-4"
+        [ngClass]="{
+          'bg-gray-400 text-white cursor-not-allowed':
+            !newStudent.studentNum ||
+            !newStudent.name ||
+            !newStudent.surname ||
+            newStudent.studentClass === 0,
+          'bg-blue-600 text-white':
+            newStudent.studentNum &&
+            newStudent.name &&
+            newStudent.surname &&
+            newStudent.studentClass !== 0
+        }"
+        type="submit"
+        [disabled]="
+          !newStudent.studentNum ||
+          !newStudent.name ||
+          !newStudent.surname ||
+          newStudent.studentClass === 0
+        "
+      >
+        Şagird əlavə et
+      </button>
+    </div>
+  </form>
+
+  <h2 class="text-2xl font-bold mb-4">Şagird siyahısı</h2>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-300">
+      <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <tr>
+          <th class="py-3 px-6 text-left">Şagird nömrəsi</th>
+          <th class="py-3 px-6 text-left">Ad</th>
+          <th class="py-3 px-6 text-left">Soyad</th>
+          <th class="py-3 px-6 text-left">Sinif</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-sm">
+        <tr
+          *ngFor="let student of students"
+          class="border-b border-gray-200 hover:bg-gray-100"
+        >
+          <td class="py-3 px-6 text-left whitespace-nowrap">
+            {{ student.studentNum }}
+          </td>
+          <td class="py-3 px-6 text-left">{{ student.name }}</td>
+          <td class="py-3 px-6 text-left">{{ student.surname }}</td>
+          <td class="py-3 px-6 text-left">{{ student.studentClass }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

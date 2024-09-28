@@ -1,0 +1,145 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Dərs əlavə et</h2>
+
+  <form (ngSubmit)="handleAddLesson()">
+    <div class="flex flex-col space-y-2 mb-6">
+      <label>Dərs kodu</label>
+      <input
+        type="text"
+        class="border p-2"
+        placeholder="Dərs kodu"
+        name="lessonCode"
+        [(ngModel)]="newLesson.lessonCode"
+        required
+        pattern="^[A-Za-z0-9]{3}$"
+      />
+      <span *ngIf="!newLesson.lessonCode" class="text-red-500"
+        >Dərs kodu daxil edilməlidir.</span
+      >
+      <span
+        *ngIf="newLesson.lessonCode && newLesson.lessonCode.length !== 3"
+        class="text-red-500"
+        >Dərs kodu 3 simvoldan ibarət olmalıdır.</span
+      >
+
+      <label>Dərs adı</label>
+      <input
+        type="text"
+        class="border p-2"
+        placeholder="Dərs adı"
+        name="name"
+        [(ngModel)]="newLesson.name"
+        required
+      />
+      <span *ngIf="!newLesson.name" class="text-red-500"
+        >Dərs adı daxil edilməlidir.</span
+      >
+
+      <label>Sinif</label>
+      <input
+        type="number"
+        class="border p-2"
+        placeholder="Sinif"
+        name="lessonClass"
+        [(ngModel)]="newLesson.lessonClass"
+        required
+        min="1"
+        max="12"
+      />
+      <span
+        *ngIf="newLesson.lessonClass < 1 || newLesson.lessonClass > 12"
+        class="text-red-500"
+        >Sinif 1-12 arasında olmalıdır.</span
+      >
+
+      <label>Müəllimin adı</label>
+      <input
+        type="text"
+        class="border p-2"
+        placeholder="Müəllimin adı"
+        name="teacherName"
+        [(ngModel)]="newLesson.teacherName"
+        required
+      />
+      <span *ngIf="!newLesson.teacherName" class="text-red-500"
+        >Müəllimin adı daxil edilməlidir.</span
+      >
+
+      <label>Müəllimin soyadı</label>
+      <input
+        type="text"
+        class="border p-2"
+        placeholder="Müəllimin soyadı"
+        name="teacherSurname"
+        [(ngModel)]="newLesson.teacherSurname"
+        required
+      />
+      <span *ngIf="!newLesson.teacherSurname" class="text-red-500"
+        >Müəllimin soyadı daxil edilməlidir.</span
+      >
+
+      <button
+        class="py-2 mt-4"
+        [ngClass]="{
+          'bg-gray-400 text-white cursor-not-allowed':
+            !newLesson.lessonCode ||
+            newLesson.lessonCode.length !== 3 ||
+            !newLesson.name ||
+            newLesson.lessonClass < 1 ||
+            newLesson.lessonClass > 12 ||
+            !newLesson.teacherName ||
+            !newLesson.teacherSurname,
+          'bg-blue-600 text-white':
+            newLesson.lessonCode &&
+            newLesson.lessonCode.length === 3 &&
+            newLesson.name &&
+            newLesson.lessonClass >= 1 &&
+            newLesson.lessonClass <= 12 &&
+            newLesson.teacherName &&
+            newLesson.teacherSurname
+        }"
+        type="submit"
+        [disabled]="
+          !newLesson.lessonCode ||
+          newLesson.lessonCode.length !== 3 ||
+          !newLesson.name ||
+          newLesson.lessonClass < 1 ||
+          newLesson.lessonClass > 12 ||
+          !newLesson.teacherName ||
+          !newLesson.teacherSurname
+        "
+      >
+        Əlavə et
+      </button>
+    </div>
+  </form>
+
+  <h2 class="text-2xl font-bold mb-4">Dərs siyahısı</h2>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-300">
+      <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <tr>
+          <th class="py-3 px-6 text-left">Dərs Kodu</th>
+          <th class="py-3 px-6 text-left">Dərs</th>
+          <th class="py-3 px-6 text-left">Sinif</th>
+          <th class="py-3 px-6 text-left">Müəllim</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-base">
+        <tr
+          class="border-b border-gray-200 hover:bg-gray-100"
+          *ngFor="let lesson of lessons"
+        >
+          <td class="py-3 px-6 text-left whitespace-nowrap">
+            {{ lesson.lessonCode }}
+          </td>
+          <td class="py-3 px-6 text-left">{{ lesson.name }}</td>
+          <td class="py-3 px-6 text-left">{{ lesson.lessonClass }}</td>
+          <td class="py-3 px-6 text-left">
+            {{ lesson.teacherName }} {{ lesson.teacherSurname }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

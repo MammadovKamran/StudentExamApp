@@ -1,0 +1,139 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">İmtahan əlavə et</h2>
+  <form (ngSubmit)="addExam()">
+    <div class="flex flex-col space-y-2 mb-6">
+      <label>Dərs kodu</label>
+      <select
+        title="lessonCode"
+        class="border p-2"
+        name="lessonCode"
+        [(ngModel)]="newExam.lessonCode"
+        required
+      >
+        <option value="0">Dərs kodunu seçin</option>
+        <option *ngFor="let code of lessonCodes" [value]="code">
+          {{ code }}
+        </option>
+      </select>
+      <span *ngIf="!newExam.lessonCode" class="text-red-500"
+        >Dərs kodu seçilməlidir.</span
+      >
+
+      <label>Şagirdin nömrəsi</label>
+      <select
+        title="studentNum"
+        class="border p-2"
+        [(ngModel)]="newExam.studentNum"
+        name="studentNum"
+        required
+      >
+        <option value="0">Şagirdin nömrəsi seçin</option>
+        <option *ngFor="let num of studentNumbers" [value]="num">
+          {{ num }}
+        </option>
+      </select>
+      <span *ngIf="!newExam.studentNum" class="text-red-500"
+        >Şagirdin nömrəsi seçilməlidir.</span
+      >
+
+      <label>İmtahan tarixi</label>
+      <input
+        type="date"
+        class="border p-2"
+        placeholder="İmtahan Tarixi"
+        [(ngModel)]="newExam.examDate"
+        name="examDate"
+        required
+      />
+      <span *ngIf="!newExam.examDate" class="text-red-500"
+        >İmtahan tarixi daxil edilməlidir.</span
+      >
+
+      <label>Şagirdin qiyməti</label>
+      <input
+        type="number"
+        class="border p-2"
+        placeholder="Qiymət"
+        [(ngModel)]="newExam.score"
+        name="score"
+        required
+        min="0"
+        max="10"
+      />
+      <span
+        *ngIf="newExam.score <= 0 || newExam.score >= 10"
+        class="text-red-500"
+        >Qiymət 0-10 arasında olmalıdır.</span
+      >
+
+      <button
+        class="py-2 mt-4"
+        type="submit"
+        [ngClass]="{
+          'bg-gray-400 text-white cursor-not-allowed':
+            !newExam.lessonCode ||
+            !newExam.studentNum ||
+            !newExam.examDate ||
+            newExam.score < 0 ||
+            newExam.score > 10,
+          'bg-blue-600 text-white':
+            newExam.lessonCode &&
+            newExam.studentNum &&
+            newExam.examDate &&
+            newExam.score >= 0 &&
+            newExam.score <= 10
+        }"
+        [disabled]="
+          !newExam.lessonCode ||
+          !newExam.studentNum ||
+          !newExam.examDate ||
+          newExam.score < 0 ||
+          newExam.score > 10
+        "
+      >
+        Nəticələri daxil et
+      </button>
+    </div>
+  </form>
+
+  <h2 class="text-2xl font-bold mb-4">İmtahan siyahısı</h2>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-300">
+      <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <tr>
+          <th class="py-3 px-6 text-left">Dərs</th>
+          <th class="py-3 px-6 text-left">Sinif</th>
+          <th class="py-3 px-6 text-left">Şagird</th>
+          <th class="py-3 px-6 text-left">Müəllim</th>
+          <th class="py-3 px-6 text-left">Tarix</th>
+          <th class="py-3 px-6 text-left">Qiymət</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-sm">
+        <tr
+          *ngFor="let exam of exams"
+          class="border-b border-gray-200 hover:bg-gray-100"
+        >
+          <td class="py-3 px-6 text-left whitespace-nowrap">
+            {{ exam.lesson.name }}
+            {{ exam.lessonCode }}
+          </td>
+          <td class="py-3 px-6 text-left">
+            {{ exam.lesson.lessonClass.classname }}
+          </td>
+          <td class="py-3 px-6 text-left">
+            {{ exam.studentNum }} {{ exam.student.name }}
+            {{ exam.student.surname }}
+          </td>
+          <td class="py-3 px-6 text-left">
+            {{ exam.lesson.teacherName }} {{ exam.lesson.teacherSurname }}
+          </td>
+          <td class="py-3 px-6 text-left">
+            {{ exam.examDate | date : "longDate" }}
+          </td>
+          <td class="py-3 px-6 text-left">{{ exam.score }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
